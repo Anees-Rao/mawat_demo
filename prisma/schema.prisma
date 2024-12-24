@@ -1,0 +1,221 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // or your database provider
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int         @id @default(autoincrement())
+  userId            Int         @unique
+  aliasName         String?
+  email             String      @unique
+  ageRange          String?
+  signUpDate        DateTime    @default(now())
+  topics            String?
+  status            Status      @default(ACTIVE)
+  maritalStatus     MaritalStatus?
+  pinCode           Int
+  profilePicture    String?
+  avatarImage       String?
+  securityPin       Int?
+  deviceToken       String?
+  ngoCode           String?
+  ngoId             Int?
+  userType          UserType    @default(NAWAT_USER)
+  location          UserLocation? @relation(fields: [locationId], references: [id])
+  locationId        Int?
+  languages         UserLanguage[]
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+}
+
+model Expert {
+  id                  Int         @id @default(autoincrement())
+  expertId            Int         @unique
+  name                String
+  email               String      @unique
+  degree              String?
+  certification       String?
+  specialty           String?
+  experience          String?
+  gender              String?
+  expertStatus        ExpertStatus @default(ACTIVE)
+  consultantType      ConsultantType @default(MEDICAL)
+  phone               String?
+  profileImage        String?
+  rating              String?
+  affiliatedNgo       String?
+  averageResponseTime String?
+  pinCode             Int?
+  profileRejection    Boolean     @default(false)
+  rejectionReason     String?
+  degreeId            Int?
+  majorId             Int?
+  adminId             Int?
+  document            String?
+  video               String?
+  deviceToken         String?
+  audioCall           Boolean     @default(false)
+  audioCallDuration   DateTime?
+  audioCallPrice      String?
+  videoCall           Boolean     @default(false)
+  videoCallDuration   DateTime?
+  videoCallPrice      String?
+  chatCall            Boolean     @default(false)
+  chatCallDuration    Int?
+  inviteLink          String?
+  languages           ExpertLanguage[]
+  topics              ExpertTopic[]
+  subTopics           ExpertSubTopic[]
+  location            ExpertLocation? @relation(fields: [locationId], references: [id])
+  locationId          Int?
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model Country {
+  id                 Int  @id @default(autoincrement())
+  country            String
+  UserLocation       UserLocation[]
+  ExpertLocation     ExpertLocation[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model City {
+  id                 Int  @id @default(autoincrement())
+  city               String
+  UserLocation       UserLocation[]
+  ExpertLocation     ExpertLocation[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model UserLocation {
+  id                 Int  @id @default(autoincrement())
+  cityId             Int?
+  countryId          Int?
+  userId             Int?
+  ngoId              Int?
+  City               City?    @relation(fields: [cityId], references: [id])
+  Country            Country? @relation(fields: [countryId], references: [id])
+  User               User[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ExpertLocation {
+  id                 Int  @id @default(autoincrement())
+  cityId             Int?
+  countryId          Int?
+  expertId           Int?
+  ngoId              Int?
+  City               City?    @relation(fields: [cityId], references: [id])
+  Country            Country? @relation(fields: [countryId], references: [id])
+  Expert             Expert[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model UserLanguage {
+  id                 Int  @id @default(autoincrement())
+  languageId         Int
+  userId             Int
+  Language           Language @relation(fields: [languageId], references: [id])
+  User               User   @relation(fields: [userId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ExpertLanguage {
+  id                 Int  @id @default(autoincrement())
+  languageId         Int
+  expertId           Int
+  Language           Language @relation(fields: [languageId], references: [id])
+  Expert             Expert   @relation(fields: [expertId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Language {
+  id                 Int  @id @default(autoincrement())
+  language           String
+  experts            ExpertLanguage[]
+  users              UserLanguage[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ExpertTopic {
+  id                 Int  @id @default(autoincrement())
+  topicId            Int
+  expertId           Int
+  topics             Topic  @relation(fields: [topicId], references: [id])
+  Expert             Expert @relation(fields: [expertId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model ExpertSubTopic {
+  id                 Int  @id @default(autoincrement())
+  subTopicId         Int
+  expertId           Int
+  subTopic           SubTopic @relation(fields: [subTopicId], references: [id])
+  Expert             Expert   @relation(fields: [expertId], references: [id])
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Topic {
+  id                 Int  @id @default(autoincrement())
+  topics             String
+  experts            ExpertTopic[]
+  SubTopic           SubTopic[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model SubTopic {
+  id                 Int  @id @default(autoincrement())
+  subTopics          String
+  topicId            Int
+  topic              Topic @relation(fields: [topicId], references: [id])
+  experts            ExpertSubTopic[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+enum UserType {
+  NGO_USER
+  NAWAT_USER
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum ExpertStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum MaritalStatus {
+  SINGLE
+  MARRIED
+}
+
+enum ConsultantType {
+  MEDICAL
+  AWARENESS
+}
