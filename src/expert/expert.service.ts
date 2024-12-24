@@ -7,16 +7,30 @@ import { PrismaService } from 'prisma/prisma.service';
 export class ExpertService {
   constructor(private readonly prisma: PrismaService) {}
   async create(createExpertDto: CreateExpertDto) {
-   try {
+    try {
+      const { locationId, ...expertData } = createExpertDto; 
+  
       const createExpert = await this.prisma.expert.create({
-        data: createExpertDto,
+        data: {
+          ...expertData,
+          location: {
+            connect: { id: createExpertDto.locationId },
+          },
+          languages: {
+            create: createExpertDto.languages?.map(lang => ({
+              languageId: lang.languageId,
+            })),
+          },
+        },
+
       });
+  
       return createExpert;
     } catch (error) {
       throw new Error(`Failed to create expert: ${error.message}`);
+    }
   }
-}
-
+  
   async findAll() {
     try {
       const getExpertList = await this.prisma.expert.findMany();
@@ -38,17 +52,17 @@ export class ExpertService {
     }
   }
 
-  update(id: number, updateExpertDto: UpdateExpertDto) {
-    try {
-      const updateExpert = this.prisma.expert.update({
-        where: { id },
-        data: updateExpertDto,
-      });
-      return updateExpert;
-    } catch (error) {
-      throw new Error(`Failed to update expert: ${error.message}`);
-    }
-  }
+  // update(id: number, updateExpertDto: UpdateExpertDto) {
+  //   try {
+  //     const updateExpert = this.prisma.expert.update({
+  //       where: { id },
+  //       data: updateExpertDto,
+  //     });
+  //     return updateExpert;
+  //   } catch (error) {
+  //     throw new Error(`Failed to update expert: ${error.message}`);
+  //   }
+  // }
 
   remove(id: number) {
     try {

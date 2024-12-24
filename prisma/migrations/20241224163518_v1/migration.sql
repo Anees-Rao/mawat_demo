@@ -15,7 +15,7 @@ CREATE TYPE "ConsultantType" AS ENUM ('MEDICAL', 'AWARENESS');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "userId" INTEGER NOT NULL,
     "aliasName" TEXT,
     "email" TEXT NOT NULL,
@@ -32,14 +32,28 @@ CREATE TABLE "User" (
     "ngoCode" TEXT,
     "ngoId" INTEGER,
     "userType" "UserType" NOT NULL DEFAULT 'NAWAT_USER',
-    "locationId" BIGINT,
+    "locationId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
+CREATE TABLE "UserLocation" (
+    "id" SERIAL NOT NULL,
+    "cityId" INTEGER,
+    "countryId" INTEGER,
+    "ngoId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "UserLocation_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Expert" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "expertId" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
@@ -58,9 +72,9 @@ CREATE TABLE "Expert" (
     "pinCode" INTEGER,
     "profileRejection" BOOLEAN NOT NULL DEFAULT false,
     "rejectionReason" TEXT,
-    "degreeId" BIGINT,
-    "majorId" BIGINT,
-    "adminId" BIGINT,
+    "degreeId" INTEGER,
+    "majorId" INTEGER,
+    "adminId" INTEGER,
     "document" TEXT,
     "video" TEXT,
     "deviceToken" TEXT,
@@ -71,108 +85,119 @@ CREATE TABLE "Expert" (
     "videoCallDuration" TIMESTAMP(3),
     "videoCallPrice" TEXT,
     "chatCall" BOOLEAN NOT NULL DEFAULT false,
-    "chatCallDuration" BIGINT,
+    "chatCallDuration" INTEGER,
     "inviteLink" TEXT,
-    "locationId" BIGINT,
+    "locationId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Expert_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Country" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "country" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Country_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "City" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "city" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "City_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "UserLocation" (
-    "id" BIGSERIAL NOT NULL,
-    "cityId" BIGINT,
-    "countryId" BIGINT,
-    "userId" BIGINT,
-    "ngoId" BIGINT,
-
-    CONSTRAINT "UserLocation_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "ExpertLocation" (
-    "id" BIGSERIAL NOT NULL,
-    "cityId" BIGINT,
-    "countryId" BIGINT,
-    "expertId" BIGINT,
-    "ngoId" BIGINT,
+    "id" SERIAL NOT NULL,
+    "cityId" INTEGER,
+    "countryId" INTEGER,
+    "expertId" INTEGER,
+    "ngoId" INTEGER,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ExpertLocation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "UserLanguage" (
-    "id" BIGSERIAL NOT NULL,
-    "languageId" BIGINT NOT NULL,
-    "userId" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "languageId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "UserLanguage_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ExpertLanguage" (
-    "id" BIGSERIAL NOT NULL,
-    "languageId" BIGINT NOT NULL,
-    "expertId" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "languageId" INTEGER NOT NULL,
+    "expertId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ExpertLanguage_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Language" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "language" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Language_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ExpertTopic" (
-    "id" BIGSERIAL NOT NULL,
-    "topicId" BIGINT NOT NULL,
-    "expertId" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "topicId" INTEGER NOT NULL,
+    "expertId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ExpertTopic_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "ExpertSubTopic" (
-    "id" BIGSERIAL NOT NULL,
-    "subTopicId" BIGINT NOT NULL,
-    "expertId" BIGINT NOT NULL,
+    "id" SERIAL NOT NULL,
+    "subTopicId" INTEGER NOT NULL,
+    "expertId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "ExpertSubTopic_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Topic" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "topics" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Topic_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "SubTopic" (
-    "id" BIGSERIAL NOT NULL,
+    "id" SERIAL NOT NULL,
     "subTopics" TEXT NOT NULL,
-    "topicId" BIGINT NOT NULL,
+    "topicId" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "SubTopic_pkey" PRIMARY KEY ("id")
 );
@@ -193,13 +218,13 @@ CREATE UNIQUE INDEX "Expert_email_key" ON "Expert"("email");
 ALTER TABLE "User" ADD CONSTRAINT "User_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "UserLocation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Expert" ADD CONSTRAINT "Expert_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "ExpertLocation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "UserLocation" ADD CONSTRAINT "UserLocation_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UserLocation" ADD CONSTRAINT "UserLocation_countryId_fkey" FOREIGN KEY ("countryId") REFERENCES "Country"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Expert" ADD CONSTRAINT "Expert_locationId_fkey" FOREIGN KEY ("locationId") REFERENCES "ExpertLocation"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ExpertLocation" ADD CONSTRAINT "ExpertLocation_cityId_fkey" FOREIGN KEY ("cityId") REFERENCES "City"("id") ON DELETE SET NULL ON UPDATE CASCADE;

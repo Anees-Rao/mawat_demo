@@ -1,5 +1,11 @@
-import { IsEmail, IsEnum, IsInt, IsOptional, IsString, IsBoolean, Min, IsNumber } from 'class-validator';
+import { IsEmail, IsEnum, IsInt, IsOptional, IsString, IsBoolean, Min, IsNumber, ValidateNested, IsArray } from 'class-validator';
 import { ExpertStatus, ConsultantType } from '@prisma/client';
+import { Type } from 'class-transformer';
+
+class LanguageDto {
+  @IsInt()
+  languageId: number;
+}
 
 export class CreateExpertDto {
   @IsInt()
@@ -120,6 +126,11 @@ export class CreateExpertDto {
   @IsOptional()
   inviteLink?: string;
 
-  @IsString()
+  @IsNumber()
   locationId?: number
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => LanguageDto)
+  languages?: LanguageDto[];
 }

@@ -7,7 +7,7 @@ import { UpdateExpertDto } from './dto/update-expert.dto';
 export class ExpertController {
   constructor(private readonly expertService: ExpertService) {}
 
-  @Post()
+  @Post('create')
   create(@Body() createExpertDto: CreateExpertDto) {
     return this.expertService.create(createExpertDto);
   }
@@ -22,10 +22,10 @@ export class ExpertController {
     return this.expertService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateExpertDto: UpdateExpertDto) {
-    return this.expertService.update(+id, updateExpertDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateExpertDto: UpdateExpertDto) {
+  //   return this.expertService.update(+id, updateExpertDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
